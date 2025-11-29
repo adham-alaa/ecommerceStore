@@ -175,7 +175,7 @@ colorVariants: [
 
 ## 📊 Order Management
 
-- **Unique Order Numbers**: Random 3-5 digit numbers (100-99999)
+- **Unique Order Numbers**
 - **Payment Status**: Pending, Paid, Cancelled
 - **Order Details**: Full customer info, products with variants, pricing
 - **Admin Dashboard**: Filter orders by status, update payment status
@@ -211,30 +211,4 @@ colorVariants: [
 2. Deploy the `dist` folder to your static hosting service
 3. Update API baseURL in `frontend/src/lib/axios.js`
 
-## 🤝 Contributing
 
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
-
-## 📝 License
-
-This project is licensed under the ISC License.
-
-## 👨‍💻 Author
-
-Built with ❤️ for the Egyptian market
-
-## 🙏 Acknowledgments
-
-- React community for amazing libraries
-- Tailwind CSS for the utility-first approach
-- Framer Motion for smooth animations
-- Cloudinary for image management
-- Upstash for Redis hosting
-
----
-
-**Note**: This is a demonstration project. For production use, ensure proper security audits, testing, and optimization.
