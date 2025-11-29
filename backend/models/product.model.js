@@ -23,6 +23,31 @@ const productSchema = new mongoose.Schema({
         type: String,
         required: [true, "Product category is required"]
     },
+    colorVariants: [{
+        color: {
+            type: String,
+            required: true,
+            trim: true
+        },
+        image: {
+            type: String,
+            required: true
+        },
+        sizes: [{
+            size: {
+                type: String,
+                enum: ["XS", "S", "M", "L", "XL", "XXL", "XXXL"],
+                uppercase: true,
+                required: true
+            },
+            stock: {
+                type: Number,
+                min: [0, "Stock cannot be negative"],
+                default: 0,
+                required: true
+            }
+        }]
+    }],
     isFeatured: {
         type: Boolean,
         default: false

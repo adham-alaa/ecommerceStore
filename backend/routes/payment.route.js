@@ -1,16 +1,12 @@
 import express from "express";
-import { protectRoute } from "../middleware/auth.middleware.js";
-import { createCashOrder, getOrderHistory } from "../controllers/payment.controller.js";
+import { protectRoute, adminRoute } from "../middleware/auth.middleware.js";
+import { createCashOrder, getOrderHistory, getAllOrders, updateOrderStatus } from "../controllers/payment.controller.js";
 
 const router = express.Router();
 
 router.post("/create-order", protectRoute, createCashOrder);
 router.get("/orders", protectRoute, getOrderHistory);
-
-export default router;
-
-
-
-
+router.get("/orders/all", protectRoute, adminRoute, getAllOrders);
+router.patch("/orders/:orderId/status", protectRoute, adminRoute, updateOrderStatus);
 
 export default router;

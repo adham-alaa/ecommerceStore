@@ -39,12 +39,17 @@ const setCookies = (res, accessToken, refreshToken) => {
 
 export const Signup = async (req, res) => {
     try {
-        const { email, password, name } = req.body;
+        const { email, password, name, phone, address } = req.body;
         const userExists = await User.findOne({ email });
         if (userExists) {
             return res.status(400).json({ message: "User already exists" });
         }
-        const user = await User.create({ email, password, name });
+
+        const userData = { email, password, name };
+        if (phone) userData.phone = phone;
+        if (address) userData.address = address;
+
+        const user = await User.create(userData);
 
         const { accessToken, refreshToken } = generateToken(user._id,)
         await storerefreshToken(user._id, refreshToken);
@@ -57,12 +62,14 @@ export const Signup = async (req, res) => {
                 _id: user._id,
                 name: user.name,
                 email: user.email,
-                role: user.role
+                role: user.role,
+                phone: user.phone,
+                address: user.address
             }, message: "User created successfully"
         });
     } catch (error) {
         console.log(error.message);
-        res.status(500).json({ message: "Server error", error: error.message });
+        res.status(500).json({ message: error.message, error: error.message });
     }
 
 
@@ -83,7 +90,9 @@ export const Login = async (req, res) => {
                     _id: user._id,
                     name: user.name,
                     email: user.email,
-                    role: user.role
+                    role: user.role,
+                    phone: user.phone,
+                    address: user.address
                 }, message: "Login successful"
             });
         } else {
@@ -92,7 +101,7 @@ export const Login = async (req, res) => {
 
     } catch (error) {
         console.log(error.message);
-        res.status(500).json({ message: "Server error", error: error.message });
+        res.status(500).json({ message: error.message, error: error.message });
 
     }
 };
@@ -110,7 +119,7 @@ export const Logout = async (req, res) => {
         res.status(200).json({ message: "Logged out successfully" });
     } catch (error) {
         console.log(error.message);
-        res.status(500).json({ message: "Server error", error: error.message });
+        res.status(500).json({ message: error.message, error: error.message });
 
     }
 };
@@ -140,9 +149,51 @@ export const refreshToken = async (req, res) => {
 
     } catch (error) {
         console.log(error.message);
-        res.status(500).json({ message: "Server error", error: error.message });
+        res.status(500).json({ message: error.message, error: error.message });
     }
 };
 
-// implement get profile controller later
-// export const getProfile = async (req, res) => {}
+export const getProfile = async (req, res) => {
+    try {
+        res.status(200).json({
+            _id: req.user._id,
+            name: req.user.name,
+            email: req.user.email,
+            role: req.user.role,
+            phone: req.user.phone,
+            address: req.user.address
+        });
+    } catch (error) {
+        console.log(error.message);
+        res.status(500).json({ message: error.message, error: error.message });
+    }
+};
+
+export const updateProfile = async (req, res) => {
+    try {
+        const { phone, address } = req.body;
+
+        const updateData = {};
+        if (phone !== undefined) updateData.phone = phone;
+        if (address !== undefined) updateData.address = address;
+
+        const updatedUser = await User.findByIdAndUpdate(
+            req.user._id,
+            updateData,
+            { new: true, runValidators: true }
+        );
+
+        res.status(200).json({
+            _id: updatedUser._id,
+            name: updatedUser.name,
+            email: updatedUser.email,
+            role: updatedUser.role,
+            phone: updatedUser.phone,
+            address: updatedUser.address,
+            message: "Profile updated successfully"
+        });
+    } catch (error) {
+        console.log(error.message);
+        res.status(500).json({ message: error.message, error: error.message });
+    }
+};

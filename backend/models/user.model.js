@@ -18,6 +18,21 @@ const userSchema = new mongoose.Schema({
         required: [true, "Password is required"],
         minlength: [6, "Password must be at least 6 characters long"]
     },
+    phone: {
+        type: String,
+        trim: true
+    },
+    address: {
+        street: String,
+        apartment: String,
+        city: String,
+        governorate: String,
+        postalCode: String,
+        country: {
+            type: String,
+            default: "Egypt"
+        }
+    },
     cartItems: [
         {
             quantity: {
@@ -28,6 +43,15 @@ const userSchema = new mongoose.Schema({
                 type: mongoose.Schema.Types.ObjectId,
                 ref: "Product",
                 required: true,
+            },
+            size: {
+                type: String,
+                enum: ["XS", "S", "M", "L", "XL", "XXL", "XXXL"],
+                uppercase: true
+            },
+            color: {
+                type: String,
+                trim: true
             },
         },
     ],

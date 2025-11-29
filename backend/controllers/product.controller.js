@@ -11,7 +11,7 @@ export const getAllProducts = async (req, res) => {
 
     } catch (error) {
         console.log(error.message);
-        res.status(500).json({ message: "Server error", error: error.message });
+        res.status(500).json({ message: error.message, error: error.message });
 
     }
 };
@@ -33,38 +33,73 @@ export const getFeaturedProducts = async (req, res) => {
 
     } catch (error) {
         console.log(error.message);
-        res.status(500).json({ message: "Server error", error: error.message });
+        res.status(500).json({ message: error.message, error: error.message });
     }
 };
 
 export const createProduct = async (req, res) => {
     try {
-        const { name, description, price, image, category } = req.body;
+        const { name, description, price, image, category, colorVariants } = req.body;
 
         let cloudinaryResponse = null;
         if (image) {
-            cloudinaryResponse = await cloudinary.uploader.upload(image, {
-                folder: "products"
-            });
+            try {
+                cloudinaryResponse = await cloudinary.uploader.upload(image, {
+                    folder: "products"
+                });
+                console.log("Cloudinary upload successful:", cloudinaryResponse.secure_url);
+            } catch (uploadError) {
+                console.error("Cloudinary upload failed:", uploadError.message);
+                return res.status(400).json({ message: "Image upload failed", error: uploadError.message });
+            }
         }
-        const product = new Product.create({
+
+        // Upload color variant images to Cloudinary
+        let processedColorVariants = [];
+        if (colorVariants && Array.isArray(colorVariants)) {
+            for (const variant of colorVariants) {
+                try {
+                    const colorImageResponse = await cloudinary.uploader.upload(variant.image, {
+                        folder: "products/colors"
+                    });
+                    processedColorVariants.push({
+                        color: variant.color,
+                        image: colorImageResponse.secure_url,
+                        sizes: variant.sizes // Keep the sizes array with stock
+                    });
+                } catch (uploadError) {
+                    console.error("Color image upload failed:", uploadError.message);
+                }
+            }
+        }
+
+        const product = await Product.create({
             name,
             description,
             price,
             image: cloudinaryResponse ? cloudinaryResponse.secure_url : "",
             category,
+            colorVariants: processedColorVariants,
         });
+        console.log("Product created with image:", product.image);
         res.status(201).json({ product, message: "Product created successfully" });
     }
     catch (error) {
-        console.log(error.message);
-        res.status(500).json({ message: "Server error", error: error.message });
+        console.log("Error creating product:", error.message);
+        res.status(500).json({ message: error.message, error: error.message });
     }
 };
 
 export const deleteProduct = async (req, res) => {
     try {
-        const product = await Product.findById(req.params.id);
+        const { id } = req.params;
+
+        // Validate the ID format
+        if (!id || id === "undefined") {
+            return res.status(400).json({ message: "Product ID is required" });
+        }
+
+        const product = await Product.findById(id);
         if (!product) {
             return res.status(404).json({ message: "Product not found" });
         }
@@ -76,18 +111,19 @@ export const deleteProduct = async (req, res) => {
 
             } catch (error) {
                 console.log("Error deleting image from Cloudinary:", error.message);
-
-
             }
         }
-        await Product.findByIdAndDelete(req.params.id);
+        await Product.findByIdAndDelete(id);
+
+        // Update the featured products cache
+        await updateFeaturedProductsCache();
+        console.log("Featured products cache updated after deletion");
+
         res.status(200).json({ message: "Product deleted successfully" });
 
     } catch (error) {
         console.log(error.message);
-        res.status(500).json({ message: "Server error", error: error.message });
-
-
+        res.status(500).json({ message: error.message, error: error.message });
     }
 };
 
@@ -95,7 +131,7 @@ export const getRecommendedProducts = async (req, res) => {
     try {
         const products = await Product.aggregate([
             {
-                $sample: { size: 3 }
+                $sample: { size: 10 } // Get more products initially
             },
             {
                 $project: {
@@ -103,16 +139,50 @@ export const getRecommendedProducts = async (req, res) => {
                     name: 1,
                     description: 1,
                     image: 1,
-                    price: 1
-
+                    price: 1,
+                    category: 1,
+                    colorVariants: 1,
+                    stock: 1,
+                    // Calculate total stock from colorVariants
+                    totalStock: {
+                        $cond: {
+                            if: { $gt: [{ $size: { $ifNull: ["$colorVariants", []] } }, 0] },
+                            then: {
+                                $sum: {
+                                    $map: {
+                                        input: "$colorVariants",
+                                        as: "variant",
+                                        in: {
+                                            $sum: {
+                                                $map: {
+                                                    input: "$$variant.sizes",
+                                                    as: "size",
+                                                    in: "$$size.stock"
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            },
+                            else: { $ifNull: ["$stock", 0] }
+                        }
+                    }
                 }
+            },
+            {
+                // Filter out products with no stock
+                $match: {
+                    totalStock: { $gt: 0 }
+                }
+            },
+            {
+                $limit: 3 // Get only 3 products with stock
             }
-
         ]);
         res.status(200).json({ products });
     } catch (error) {
         console.log(error.message);
-        res.status(500).json({ message: "Server error", error: error.message });
+        res.status(500).json({ message: error.message, error: error.message });
 
     }
 }
@@ -125,7 +195,7 @@ export const getProductsByCategory = async (req, res) => {
 
     } catch (error) {
         console.log(error.message);
-        res.status(500).json({ message: "Server error", error: error.message });
+        res.status(500).json({ message: error.message, error: error.message });
     }
 }
 
@@ -143,17 +213,28 @@ export const toggleFeaturedProduct = async (req, res) => {
         }
     } catch (error) {
         console.log(error.message);
-        res.status(500).json({ message: "Server error", error: error.message });
+        res.status(500).json({ message: error.message, error: error.message });
 
     }
 };
 
 
-const updateFeaturedProductsCache = async () => {
+export const updateFeaturedProductsCache = async () => {
     try {
         const featuredProducts = await Product.find({ isFeatured: true }).lean();
         await redis.set("featured_products", JSON.stringify(featuredProducts));
     } catch (error) {
         console.log("Error updating featured products cache:", error.message);
+    }
+}
+
+export const clearFeaturedCache = async (req, res) => {
+    try {
+        await redis.del("featured_products");
+        console.log("Featured products cache cleared");
+        res.status(200).json({ message: "Cache cleared successfully" });
+    } catch (error) {
+        console.log("Error clearing cache:", error.message);
+        res.status(500).json({ message: "Failed to clear cache", error: error.message });
     }
 }

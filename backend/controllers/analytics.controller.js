@@ -17,7 +17,7 @@ export const getAllData = async (req, res) => {
 
     } catch (error) {
         console.log(error.message);
-        res.status(500).json({ message: "Server error", error: error.message });
+        res.status(500).json({ message: error.message, error: error.message });
 
     }
 }
@@ -43,8 +43,8 @@ export const getAnalyticsData = async () => {
     return {
         users: totalUsers,
         products: totalProducts,
-        sales: totalSales,
-        revenue: totalRevenue
+        totalSales: totalSales,
+        totalRevenue: totalRevenue
     };
 }
 
@@ -76,7 +76,7 @@ export const getDailySalesData = async (startDate, endDate) => {
             const foundData = dailySalesData.find((item) => item._id === date);
 
             return {
-                date,
+                name: date,
                 sales: foundData?.sales || 0,
                 revenue: foundData?.revenue || 0,
             };
