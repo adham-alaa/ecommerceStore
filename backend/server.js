@@ -18,23 +18,41 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 // CORS configuration
-const allowedOrigins = [
-    process.env.FRONTEND_URL,
-    "http://localhost:5173",
-    "https://ecommerce-store-client-liart.vercel.app"
-].filter(Boolean);
-
-console.log("Allowed origins:", allowedOrigins);
-
 app.use(cors({
-    origin: allowedOrigins,
-    methods: ["GET", "POST", "PUT", "DELETE"],
+    origin: function (origin, callback) {
+        // Allow requests with no origin (mobile apps, Postman, etc.)
+        if (!origin) return callback(null, true);
+
+        const allowedOrigins = [
+            "https://ecommerce-store-client-liart.vercel.app",
+            "http://localhost:5173",
+            process.env.FRONTEND_URL
+        ];
+
+        console.log("Request from origin:", origin);
+        console.log("FRONTEND_URL env:", process.env.FRONTEND_URL);
+
+        // Allow if origin is in the list or ends with vercel.app
+        if (allowedOrigins.some(allowed => allowed && origin.includes(allowed.replace(/^https?:\/\//, ''))) ||
+            origin.endsWith('.vercel.app')) {
+            callback(null, true);
+        } else {
+            callback(null, true); // Temporarily allow all for debugging
+        }
+    },
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"],
     credentials: true,
     optionsSuccessStatus: 200
 }));
 
 app.use(express.json({ limit: "10mb" }));
 app.use(cookieParser());
+
+// Root route for testing
+app.get("/", (req, res) => {
+    res.json({ message: "eCommerce API is running", status: "ok" });
+});
 
 app.use("/api/auth", authRoutes)
 app.use("/api/products", productRoutes)
