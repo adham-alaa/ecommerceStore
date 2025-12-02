@@ -11,6 +11,7 @@ import categoryRoutes from "./routes/category.route.js"
 import { connectDB } from "./lib/db.js";
 import cookieParser from "cookie-parser";
 
+
 dotenv.config();
 
 const app = express();
