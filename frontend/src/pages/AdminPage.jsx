@@ -31,7 +31,7 @@ const AdminPage = () => {
         <div className='min-h-screen relative overflow-hidden'>
             <div className='relative z-10 container mx-auto px-4 py-16'>
                 <motion.h1
-                    className='text-4xl font-bold mb-8 text-stone-400 text-center'
+                    className='text-4xl font-bold mb-8 text-gray-900 text-center'
                     initial={{ opacity: 0, y: -20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.8 }}
@@ -39,18 +39,19 @@ const AdminPage = () => {
                     Admin Dashboard
                 </motion.h1>
 
-                <div className='flex justify-center mb-8'>
+                <div className='flex flex-wrap justify-center gap-2 mb-8'>
                     {tabs.map((tab) => (
                         <button
                             key={tab.id}
                             onClick={() => setActiveTab(tab.id)}
-                            className={`flex items-center px-4 py-2 mx-2 rounded-md transition-colors duration-200 ${activeTab === tab.id
-                                ? "bg-stone-500 text-white"
-                                : "bg-gray-700 text-gray-300 hover:bg-gray-600"
+                            className={`flex items-center px-3 sm:px-4 py-2 rounded-md transition-colors duration-200 text-sm sm:text-base ${activeTab === tab.id
+                                ? "bg-gray-900 text-white"
+                                : "bg-white text-gray-700 border border-gray-300 hover:bg-gray-100"
                                 }`}
                         >
-                            <tab.icon className='mr-2 h-5 w-5' />
-                            {tab.label}
+                            <tab.icon className='mr-1 sm:mr-2 h-4 w-4 sm:h-5 sm:w-5' />
+                            <span className='hidden sm:inline'>{tab.label}</span>
+                            <span className='sm:hidden'>{tab.label.split(' ')[0]}</span>
                         </button>
                     ))}
                 </div>

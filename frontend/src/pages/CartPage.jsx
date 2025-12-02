@@ -61,7 +61,7 @@ const EmptyCartUI = () => (
         <h3 className='text-2xl font-semibold '>Your cart is empty</h3>
         <p className='text-gray-400'>Looks like you {"haven't"} added anything to your cart yet.</p>
         <Link
-            className='mt-4 rounded-md bg-stone-400 px-6 py-2 text-white transition-colors hover:bg-stone-500'
+            className='mt-4 rounded-md bg-stone-500 px-6 py-2 text-white transition-colors hover:bg-stone-600'
             to='/'
         >
             Start Shopping

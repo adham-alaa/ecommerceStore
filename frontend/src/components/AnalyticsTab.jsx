@@ -69,7 +69,7 @@ const AnalyticsTab = () => {
                 />
             </div>
             <motion.div
-                className='bg-gray-800/60 rounded-lg p-6 shadow-lg'
+                className='bg-white rounded-lg p-6 shadow-lg border border-gray-200'
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 0.25 }}
@@ -77,9 +77,9 @@ const AnalyticsTab = () => {
                 <ResponsiveContainer width='100%' height={400}>
                     <LineChart data={dailySalesData}>
                         <CartesianGrid strokeDasharray='3 3' />
-                        <XAxis dataKey='name' stroke='#D1D5DB' />
-                        <YAxis yAxisId='left' stroke='#D1D5DB' />
-                        <YAxis yAxisId='right' orientation='right' stroke='#D1D5DB' />
+                        <XAxis dataKey='name' stroke='#374151' />
+                        <YAxis yAxisId='left' stroke='#374151' />
+                        <YAxis yAxisId='right' orientation='right' stroke='#374151' />
                         <Tooltip />
                         <Legend />
                         <Line
@@ -108,15 +108,15 @@ export default AnalyticsTab;
 
 const AnalyticsCard = ({ title, value, icon: Icon, color }) => (
     <motion.div
-        className={`bg-gray-800 rounded-lg p-6 shadow-lg overflow-hidden relative ${color}`}
+        className={`bg-white rounded-lg p-6 shadow-lg overflow-hidden relative border border-gray-200 ${color}`}
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
     >
         <div className='flex justify-between items-center'>
             <div className='z-10'>
-                <p className='text-stone-200 text-sm mb-1 font-semibold'>{title}</p>
-                <h3 className='text-white text-3xl font-bold'>{value}</h3>
+                <p className='text-gray-600 text-sm mb-1 font-semibold'>{title}</p>
+                <h3 className='text-gray-900 text-3xl font-bold'>{value}</h3>
             </div>
         </div>
         <div className='absolute inset-0 bg-linear-to-br from-stone-500 to-stone-800 opacity-30' />

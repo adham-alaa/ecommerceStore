@@ -50,10 +50,10 @@ const ProductOptionsModal = ({ product, isOpen, onClose, onAddToCart }) => {
                         exit={{ opacity: 0, scale: 0.95, y: 20 }}
                         className='fixed inset-0 z-100 flex items-center justify-center p-4 pt-20'
                     >
-                        <div className='bg-gray-800 rounded-lg shadow-xl max-w-2xl w-full p-6 max-h-[85vh] overflow-y-auto pb-10'>
+                        <div className='bg-white rounded-lg shadow-xl max-w-2xl w-full p-6 max-h-[85vh] overflow-y-auto pb-10'>
                             {/* Header */}
                             <div className='flex items-center justify-between mb-4'>
-                                <h3 className='text-xl font-semibold text-white'>
+                                <h3 className='text-lg sm:text-xl font-semibold text-gray-900'>
                                     Select Options
                                 </h3>
                                 <button
@@ -69,14 +69,14 @@ const ProductOptionsModal = ({ product, isOpen, onClose, onAddToCart }) => {
                                 <img
                                     src={displayImage}
                                     alt={product.name}
-                                    className='w-full h-80 object-contain rounded-lg bg-gray-900'
+                                    className='w-full h-48 sm:h-80 object-contain rounded-lg bg-gray-100'
                                 />
                             </div>
 
                             {/* Product Info */}
                             <div className='mb-6'>
-                                <p className='text-gray-300 font-medium'>{product.name}</p>
-                                <p className='text-stone-400 font-bold'>EGP {product.price}</p>
+                                <p className='text-gray-900 font-medium'>{product.name}</p>
+                                <p className='text-gray-700 font-bold text-lg'>EGP {product.price}</p>
                             </div>
 
                             {!hasOptions ? (
@@ -88,7 +88,7 @@ const ProductOptionsModal = ({ product, isOpen, onClose, onAddToCart }) => {
                                     {/* Color Selection */}
                                     {product.colorVariants?.length > 0 && (
                                         <div className='mb-6'>
-                                            <label className='block text-sm font-medium text-gray-300 mb-2'>
+                                            <label className='block text-sm font-medium text-gray-700 mb-2'>
                                                 Select Color *
                                             </label>
                                             <div className='flex flex-wrap gap-2'>
@@ -100,9 +100,9 @@ const ProductOptionsModal = ({ product, isOpen, onClose, onAddToCart }) => {
                                                             setSelectedColor(variant.color);
                                                             setSelectedSize(""); // Reset size when color changes
                                                         }}
-                                                        className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${selectedColor === variant.color
-                                                            ? 'bg-stone-500 text-white'
-                                                            : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
+                                                        className={`px-3 sm:px-4 py-2 rounded-md text-sm font-medium transition-colors ${selectedColor === variant.color
+                                                            ? 'bg-gray-900 text-white'
+                                                            : 'bg-gray-100 text-gray-700 border border-gray-300 hover:bg-gray-200'
                                                             }`}
                                                     >
                                                         {variant.color}
@@ -115,7 +115,7 @@ const ProductOptionsModal = ({ product, isOpen, onClose, onAddToCart }) => {
                                     {/* Size Selection - only shown after color is selected */}
                                     {selectedColorVariant && availableSizes.length > 0 && (
                                         <div className='mb-6'>
-                                            <label className='block text-sm font-medium text-gray-300 mb-2'>
+                                            <label className='block text-sm font-medium text-gray-700 mb-2'>
                                                 Select Size *
                                             </label>
                                             <div className='flex flex-wrap gap-2'>
@@ -127,11 +127,11 @@ const ProductOptionsModal = ({ product, isOpen, onClose, onAddToCart }) => {
                                                             type='button'
                                                             onClick={() => !isOutOfStock && setSelectedSize(sizeObj.size)}
                                                             disabled={isOutOfStock}
-                                                            className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${selectedSize === sizeObj.size
-                                                                ? 'bg-stone-500 text-white'
+                                                            className={`px-3 sm:px-4 py-2 rounded-md text-sm font-medium transition-colors ${selectedSize === sizeObj.size
+                                                                ? 'bg-gray-900 text-white'
                                                                 : isOutOfStock
-                                                                    ? 'bg-gray-800 text-gray-500 cursor-not-allowed line-through'
-                                                                    : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
+                                                                    ? 'bg-gray-200 text-gray-500 cursor-not-allowed line-through'
+                                                                    : 'bg-gray-100 text-gray-700 border border-gray-300 hover:bg-gray-200'
                                                                 }`}
                                                         >
                                                             {sizeObj.size} {isOutOfStock && '(Out)'}
@@ -145,10 +145,10 @@ const ProductOptionsModal = ({ product, isOpen, onClose, onAddToCart }) => {
                             )}
 
                             {/* Action Buttons */}
-                            <div className='flex gap-3'>
+                            <div className='flex flex-col sm:flex-row gap-2 sm:gap-3'>
                                 <button
                                     onClick={onClose}
-                                    className='flex-1 px-4 py-2 bg-gray-700 text-white rounded-md hover:bg-gray-600 transition-colors'
+                                    className='flex-1 px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors'
                                 >
                                     Cancel
                                 </button>
@@ -158,7 +158,7 @@ const ProductOptionsModal = ({ product, isOpen, onClose, onAddToCart }) => {
                                         (product.colorVariants?.length > 0 && !selectedColor) ||
                                         (selectedColorVariant && !selectedSize)
                                     }
-                                    className='flex-1 px-4 py-2 bg-stone-500 text-white rounded-md hover:bg-stone-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed'
+                                    className='flex-1 px-4 py-2 bg-gray-900 text-white rounded-md hover:bg-gray-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed'
                                 >
                                     Add to Cart
                                 </button>

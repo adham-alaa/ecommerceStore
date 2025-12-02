@@ -206,8 +206,8 @@ const CheckoutPage = () => {
     }
 
     return (
-        <div className='py-8 md:py-16'>
-            <div className='mx-auto max-w-7xl px-4 2xl:px-0'>
+        <div className='py-4 sm:py-8 md:py-16'>
+            <div className='mx-auto max-w-7xl px-4 sm:px-6 2xl:px-0'>
                 <h1 className='text-3xl font-bold text-stone-400 mb-8'>Checkout</h1>
 
                 <div className='grid lg:grid-cols-2 gap-8'>
@@ -219,11 +219,11 @@ const CheckoutPage = () => {
                     >
                         <form onSubmit={handleSubmit} className='space-y-6'>
                             {/* Personal Information */}
-                            <div className='bg-gray-800 rounded-lg border border-gray-700 p-6'>
-                                <h2 className='text-xl font-semibold text-white mb-4'>Personal Information</h2>
+                            <div className='bg-white rounded-lg border border-gray-200 p-6'>
+                                <h2 className='text-xl font-semibold text-gray-900 mb-4'>Personal Information</h2>
                                 <div className='space-y-4'>
                                     <div>
-                                        <label className='block text-sm font-medium text-gray-300 mb-2'>
+                                        <label className='block text-sm font-medium text-gray-700 mb-2'>
                                             Full Name *
                                         </label>
                                         <input
@@ -231,14 +231,14 @@ const CheckoutPage = () => {
                                             name='name'
                                             value={formData.name}
                                             onChange={handleChange}
-                                            className='w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-stone-400'
+                                            className='w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-400'
                                             required
                                         />
                                     </div>
 
                                     {!user && (
                                         <div>
-                                            <label className='block text-sm font-medium text-gray-300 mb-2'>
+                                            <label className='block text-sm font-medium text-gray-700 mb-2'>
                                                 Email Address *
                                             </label>
                                             <input
@@ -246,7 +246,7 @@ const CheckoutPage = () => {
                                                 name='email'
                                                 value={formData.email}
                                                 onChange={handleChange}
-                                                className='w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-stone-400'
+                                                className='w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-400'
                                                 required
                                             />
                                         </div>
@@ -255,7 +255,7 @@ const CheckoutPage = () => {
                                     {!user && (
                                         <>
                                             <div>
-                                                <label className='block text-sm font-medium text-gray-300 mb-2'>
+                                                <label className='block text-sm font-medium text-gray-700 mb-2'>
                                                     Password * (min. 6 characters)
                                                 </label>
                                                 <input
@@ -263,13 +263,13 @@ const CheckoutPage = () => {
                                                     name='password'
                                                     value={formData.password}
                                                     onChange={handleChange}
-                                                    className='w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-stone-400'
+                                                    className='w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-400'
                                                     required
                                                 />
                                             </div>
 
                                             <div>
-                                                <label className='block text-sm font-medium text-gray-300 mb-2'>
+                                                <label className='block text-sm font-medium text-gray-700 mb-2'>
                                                     Confirm Password *
                                                 </label>
                                                 <input
@@ -277,7 +277,7 @@ const CheckoutPage = () => {
                                                     name='confirmPassword'
                                                     value={formData.confirmPassword}
                                                     onChange={handleChange}
-                                                    className='w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-stone-400'
+                                                    className='w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-400'
                                                     required
                                                 />
                                             </div>
@@ -285,7 +285,7 @@ const CheckoutPage = () => {
                                     )}
 
                                     <div>
-                                        <label className='block text-sm font-medium text-gray-300 mb-2'>
+                                        <label className='block text-sm font-medium text-gray-700 mb-2'>
                                             Phone Number *
                                         </label>
                                         <input
@@ -294,7 +294,7 @@ const CheckoutPage = () => {
                                             value={formData.phone}
                                             onChange={handleChange}
                                             placeholder='+20 123 456 7890'
-                                            className='w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-stone-400'
+                                            className='w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-400'
                                             required
                                         />
                                     </div>
@@ -302,11 +302,11 @@ const CheckoutPage = () => {
                             </div>
 
                             {/* Shipping Address */}
-                            <div className='bg-gray-800 rounded-lg border border-gray-700 p-6'>
-                                <h2 className='text-xl font-semibold text-white mb-4'>Shipping Address</h2>
+                            <div className='bg-white rounded-lg border border-gray-200 p-6'>
+                                <h2 className='text-xl font-semibold text-gray-900 mb-4'>Shipping Address</h2>
                                 <div className='space-y-4'>
                                     <div>
-                                        <label className='block text-sm font-medium text-gray-300 mb-2'>
+                                        <label className='block text-sm font-medium text-gray-700 mb-2'>
                                             Street Address *
                                         </label>
                                         <input
@@ -315,13 +315,13 @@ const CheckoutPage = () => {
                                             value={formData.street}
                                             onChange={handleChange}
                                             placeholder='e.g., 123 Main Street'
-                                            className='w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-stone-400'
+                                            className='w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-400'
                                             required
                                         />
                                     </div>
 
                                     <div>
-                                        <label className='block text-sm font-medium text-gray-300 mb-2'>
+                                        <label className='block text-sm font-medium text-gray-700 mb-2'>
                                             Apartment / Building (Optional)
                                         </label>
                                         <input
@@ -330,20 +330,20 @@ const CheckoutPage = () => {
                                             value={formData.apartment}
                                             onChange={handleChange}
                                             placeholder='e.g., Apt 4B, Floor 2'
-                                            className='w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-stone-400'
+                                            className='w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-400'
                                         />
                                     </div>
 
-                                    <div className='grid grid-cols-2 gap-4'>
+                                    <div className='grid grid-cols-1 sm:grid-cols-2 gap-4'>
                                         <div>
-                                            <label className='block text-sm font-medium text-gray-300 mb-2'>
+                                            <label className='block text-sm font-medium text-gray-700 mb-2'>
                                                 Governorate *
                                             </label>
                                             <select
                                                 name='governorate'
                                                 value={formData.governorate}
                                                 onChange={handleChange}
-                                                className='w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-stone-400'
+                                                className='w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-400'
                                                 required
                                             >
                                                 <option value=''>Select Governorate</option>
@@ -378,7 +378,7 @@ const CheckoutPage = () => {
                                         </div>
 
                                         <div>
-                                            <label className='block text-sm font-medium text-gray-300 mb-2'>
+                                            <label className='block text-sm font-medium text-gray-700 mb-2'>
                                                 City *
                                             </label>
                                             <input
@@ -387,15 +387,15 @@ const CheckoutPage = () => {
                                                 value={formData.city}
                                                 onChange={handleChange}
                                                 placeholder='e.g., Nasr City'
-                                                className='w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-stone-400'
+                                                className='w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-400'
                                                 required
                                             />
                                         </div>
                                     </div>
 
-                                    <div className='grid grid-cols-2 gap-4'>
+                                    <div className='grid grid-cols-1 sm:grid-cols-2 gap-4'>
                                         <div>
-                                            <label className='block text-sm font-medium text-gray-300 mb-2'>
+                                            <label className='block text-sm font-medium text-gray-700 mb-2'>
                                                 Postal Code *
                                             </label>
                                             <input
@@ -404,13 +404,13 @@ const CheckoutPage = () => {
                                                 value={formData.postalCode}
                                                 onChange={handleChange}
                                                 placeholder='e.g., 11371'
-                                                className='w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-stone-400'
+                                                className='w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-400'
                                                 required
                                             />
                                         </div>
 
                                         <div>
-                                            <label className='block text-sm font-medium text-gray-300 mb-2'>
+                                            <label className='block text-sm font-medium text-gray-700 mb-2'>
                                                 Country
                                             </label>
                                             <input
@@ -418,7 +418,7 @@ const CheckoutPage = () => {
                                                 name='country'
                                                 value={formData.country}
                                                 disabled
-                                                className='w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white opacity-50 cursor-not-allowed'
+                                                className='w-full px-4 py-2 bg-gray-100 border border-gray-300 rounded-lg text-gray-500 cursor-not-allowed'
                                             />
                                         </div>
                                     </div>
@@ -433,12 +433,12 @@ const CheckoutPage = () => {
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ duration: 0.5 }}
                     >
-                        <div className='bg-gray-800 rounded-lg border border-gray-700 p-6 sticky top-24'>
+                        <div className='bg-white rounded-lg border border-gray-200 p-6 sticky top-24'>
                             <h2 className='text-xl font-semibold text-stone-400 mb-4'>Order Summary</h2>
 
                             <div className='space-y-4 mb-6'>
                                 {cart.map((item) => (
-                                    <div key={item._id} className='flex justify-between items-center py-2 border-b border-gray-700'>
+                                    <div key={item._id} className='flex justify-between items-center py-2 border-b border-gray-200'>
                                         <div className='flex items-center gap-3'>
                                             <img
                                                 src={item.image}
@@ -446,46 +446,46 @@ const CheckoutPage = () => {
                                                 className='w-12 h-12 object-cover rounded'
                                             />
                                             <div>
-                                                <p className='text-sm text-white'>{item.name}</p>
+                                                <p className='text-sm text-gray-900'>{item.name}</p>
                                                 <p className='text-xs text-gray-400'>Qty: {item.quantity}</p>
                                             </div>
                                         </div>
-                                        <p className='text-sm text-white'>EGP {(item.price * item.quantity).toFixed(2)}</p>
+                                        <p className='text-sm text-gray-900'>EGP {(item.price * item.quantity).toFixed(2)}</p>
                                     </div>
                                 ))}
                             </div>
 
                             <div className='space-y-2 mb-6'>
-                                <div className='flex justify-between text-gray-300'>
+                                <div className='flex justify-between text-gray-700'>
                                     <span>Subtotal</span>
                                     <span>EGP {formattedSubtotal}</span>
                                 </div>
 
                                 {savings > 0 && (
-                                    <div className='flex justify-between text-stone-400'>
+                                    <div className='flex justify-between text-green-600'>
                                         <span>Savings</span>
                                         <span>-EGP {formattedSavings}</span>
                                     </div>
                                 )}
 
                                 {coupon && (
-                                    <div className='flex justify-between text-stone-400'>
+                                    <div className='flex justify-between text-green-600'>
                                         <span>Coupon ({coupon.code})</span>
                                         <span>-{coupon.discountPercentage}%</span>
                                     </div>
                                 )}
 
-                                <div className='flex justify-between text-lg font-bold text-white border-t border-gray-700 pt-2'>
+                                <div className='flex justify-between text-lg font-bold text-gray-900 border-t border-gray-300 pt-2'>
                                     <span>Total</span>
-                                    <span className='text-stone-400'>EGP {formattedTotal}</span>
+                                    <span>EGP {formattedTotal}</span>
                                 </div>
                             </div>
 
                             <div className='rounded-lg bg-blue-900/20 border border-blue-500/30 p-3 mb-6'>
-                                <p className='text-sm text-blue-300'>
+                                <p className='text-sm text-black-300'>
                                     <span className='font-semibold'>Payment Method:</span> Cash on Delivery
                                 </p>
-                                <p className='text-xs text-blue-300/70 mt-1'>
+                                <p className='text-xs text-black-300/70 mt-1'>
                                     Please have the exact amount ready for our delivery personnel.
                                 </p>
                             </div>

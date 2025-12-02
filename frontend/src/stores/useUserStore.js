@@ -33,7 +33,7 @@ export const useUserStore = create((set, get) => ({
             set({ user: res.data.user, loading: false });
         } catch (error) {
             set({ loading: false });
-            toast.error(error.response.data.message || "An error occurred");
+            toast.error(error.response?.data?.message || "An error occurred");
         }
     },
 
@@ -85,7 +85,7 @@ axios.interceptors.response.use(
 
         // Don't retry for certain endpoints that are expected to fail for unauthenticated users
         // Note: /payments/create-order is NOT in this list - it should retry
-        const skipRetryUrls = ['/auth/profile', '/coupons', '/cart'];
+        const skipRetryUrls = ['/auth/profile', '/auth/login', '/auth/signup', '/auth/logout', '/coupons', '/cart'];
         const shouldSkipRetry = skipRetryUrls.some(url => originalRequest.url?.includes(url));
 
         if (error.response?.status === 401 && !originalRequest._retry && !shouldSkipRetry) {

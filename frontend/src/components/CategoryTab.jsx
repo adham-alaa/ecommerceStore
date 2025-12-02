@@ -101,7 +101,7 @@ const CategoryTab = () => {
             <div className="mb-6 flex justify-end">
                 <button
                     onClick={() => setShowCreateForm(!showCreateForm)}
-                    className="flex items-center gap-2 px-4 py-2 bg-stone-500 text-white rounded-md hover:bg-stone-600 transition-colors"
+                    className="flex items-center gap-2 px-4 py-2 bg-gray-900 text-white rounded-md hover:bg-gray-800 transition-colors"
                 >
                     <Plus className="h-5 w-5" />
                     {showCreateForm ? "Cancel" : "Create Category"}
@@ -113,20 +113,20 @@ const CategoryTab = () => {
                 <motion.div
                     initial={{ opacity: 0, y: -20 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="bg-gray-800 p-6 rounded-lg mb-8"
+                    className="bg-white border border-gray-200 p-6 rounded-lg mb-8"
                 >
-                    <h2 className="text-2xl font-semibold mb-4 text-stone-400">Create New Category</h2>
+                    <h2 className="text-2xl font-semibold mb-4 text-gray-900">Create New Category</h2>
                     <form onSubmit={handleCreateCategory} className="flex gap-4">
                         <input
                             type="text"
                             value={newCategoryName}
                             onChange={(e) => setNewCategoryName(e.target.value)}
                             placeholder="Category name (e.g., T-Shirts, Jeans)"
-                            className="flex-1 px-4 py-2 bg-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-stone-400"
+                            className="flex-1 px-4 py-2 bg-gray-50 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-400 text-gray-900"
                         />
                         <button
                             type="submit"
-                            className="px-6 py-2 bg-stone-500 text-white rounded-md hover:bg-stone-600 transition-colors"
+                            className="px-6 py-2 bg-gray-900 text-white rounded-md hover:bg-gray-800 transition-colors"
                         >
                             Create
                         </button>
@@ -135,9 +135,9 @@ const CategoryTab = () => {
             )}
 
             {/* Categories List */}
-            <div className="bg-gray-800 rounded-lg overflow-hidden">
-                <div className="px-6 py-4 border-b border-gray-700">
-                    <h2 className="text-2xl font-semibold text-stone-400">All Categories</h2>
+            <div className="bg-white border border-gray-200 rounded-lg overflow-hidden">
+                <div className="px-6 py-4 border-b border-gray-200">
+                    <h2 className="text-2xl font-semibold text-gray-900">All Categories</h2>
                 </div>
 
                 {categories.length === 0 ? (
@@ -162,7 +162,7 @@ const CategoryTab = () => {
                                                 type="text"
                                                 value={editingName}
                                                 onChange={(e) => setEditingName(e.target.value)}
-                                                className="flex-1 px-3 py-1 bg-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-stone-400"
+                                                className="flex-1 px-3 py-1 bg-gray-50 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-400 text-gray-900"
                                                 autoFocus
                                             />
                                             <button
@@ -185,7 +185,7 @@ const CategoryTab = () => {
                                         <>
                                             <div className="flex items-center gap-3">
                                                 <Tag className="h-5 w-5 text-stone-400" />
-                                                <span className="text-lg font-medium text-white">
+                                                <span className="text-lg font-medium text-gray-900">
                                                     {category.name}
                                                 </span>
                                                 <span className="text-sm text-gray-400">

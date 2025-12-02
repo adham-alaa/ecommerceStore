@@ -236,3 +236,71 @@ export const updateOrderStatus = async (req, res) => {
         res.status(500).json({ message: error.message, error: error.message });
     }
 }
+
+export const deleteOrder = async (req, res) => {
+    try {
+        const { orderId } = req.params;
+
+        const order = await Order.findById(orderId).populate("products.product");
+
+        if (!order) {
+            return res.status(404).json({ message: "Order not found" });
+        }
+
+        // Restore stock for cancelled orders if the order was pending or paid
+        if (order.paymentStatus !== "cancelled") {
+            let needsCacheUpdate = false;
+
+            for (const orderProduct of order.products) {
+                const product = await Product.findById(orderProduct.product);
+                if (product) {
+                    if (product.colorVariants && product.colorVariants.length > 0) {
+                        // Product uses new colorVariants structure
+                        if (orderProduct.color && orderProduct.size) {
+                            const variantIndex = product.colorVariants.findIndex(
+                                v => v.color === orderProduct.color
+                            );
+                            if (variantIndex !== -1) {
+                                const sizeIndex = product.colorVariants[variantIndex].sizes.findIndex(
+                                    s => s.size === orderProduct.size
+                                );
+                                if (sizeIndex !== -1) {
+                                    // Restore the stock for this specific color-size combination
+                                    product.colorVariants[variantIndex].sizes[sizeIndex].stock += orderProduct.quantity;
+                                    await product.save();
+                                    if (product.isFeatured) {
+                                        needsCacheUpdate = true;
+                                    }
+                                }
+                            }
+                        }
+                    } else if (product.stock !== undefined) {
+                        // Product uses old stock structure (backward compatibility)
+                        product.stock += orderProduct.quantity;
+                        await product.save();
+                        if (product.isFeatured) {
+                            needsCacheUpdate = true;
+                        }
+                    }
+                }
+            }
+
+            // Update featured products cache if any featured product stock changed
+            if (needsCacheUpdate) {
+                await updateFeaturedProductsCache();
+                console.log("Featured products cache updated after order deletion");
+            }
+        }
+
+        // Delete the order
+        await Order.findByIdAndDelete(orderId);
+
+        res.status(200).json({
+            success: true,
+            message: "Order deleted successfully"
+        });
+    } catch (error) {
+        console.log(error.message);
+        res.status(500).json({ message: error.message, error: error.message });
+    }
+}

@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import axios from "../lib/axios";
-import { Package, User, MapPin, Phone, Mail, Calendar, CreditCard, ChevronDown, ChevronUp } from "lucide-react";
+import { Package, User, MapPin, Phone, Mail, Calendar, CreditCard, ChevronDown, ChevronUp, Trash2 } from "lucide-react";
 import toast from "react-hot-toast";
 
 const OrdersTab = () => {
@@ -36,6 +36,21 @@ const OrdersTab = () => {
         } catch (error) {
             console.error("Error updating order status:", error);
             toast.error("Failed to update order status");
+        }
+    };
+
+    const handleDeleteOrder = async (orderId) => {
+        if (!window.confirm("Are you sure you want to delete this order? This action cannot be undone.")) {
+            return;
+        }
+
+        try {
+            await axios.delete(`/payments/orders/${orderId}`);
+            toast.success("Order deleted successfully");
+            fetchOrders();
+        } catch (error) {
+            console.error("Error deleting order:", error);
+            toast.error(error.response?.data?.message || "Failed to delete order");
         }
     };
 
@@ -84,22 +99,22 @@ const OrdersTab = () => {
         <div className="max-w-7xl mx-auto">
             {/* Filter Bar */}
             <div className="mb-6 flex items-center gap-4">
-                <span className="text-gray-400">Filter by status:</span>
+                <span className="text-gray-700">Filter by status:</span>
                 <div className="flex gap-2">
                     {["all", "pending", "paid", "cancelled"].map((status) => (
                         <button
                             key={status}
                             onClick={() => setFilterStatus(status)}
                             className={`px-4 py-2 rounded-md capitalize transition-colors ${filterStatus === status
-                                ? "bg-stone-500 text-white"
-                                : "bg-gray-700 text-gray-300 hover:bg-gray-600"
+                                ? "bg-gray-900 text-white"
+                                : "bg-white text-gray-700 border border-gray-300 hover:bg-gray-100"
                                 }`}
                         >
                             {status}
                         </button>
                     ))}
                 </div>
-                <span className="ml-auto text-gray-400">
+                <span className="ml-auto text-gray-700">
                     Total: {filteredOrders.length} orders
                 </span>
             </div>
@@ -107,7 +122,7 @@ const OrdersTab = () => {
             {/* Orders List */}
             <div className="space-y-4">
                 {filteredOrders.length === 0 ? (
-                    <div className="text-center py-12 text-gray-400 bg-gray-800 rounded-lg">
+                    <div className="text-center py-12 text-gray-600 bg-white border border-gray-200 rounded-lg">
                         No orders found
                     </div>
                 ) : (
@@ -119,16 +134,16 @@ const OrdersTab = () => {
                                 key={order._id}
                                 initial={{ opacity: 0, y: 20 }}
                                 animate={{ opacity: 1, y: 0 }}
-                                className="bg-gray-800 rounded-lg overflow-hidden"
+                                className="bg-white border border-gray-200 rounded-lg overflow-hidden"
                             >
                                 {/* Order Header */}
-                                <div className="p-6 border-b border-gray-700">
+                                <div className="p-6 border-b border-gray-200">
                                     <div className="flex items-center justify-between mb-4">
                                         <div className="flex items-center gap-4">
-                                            <Package className="h-6 w-6 text-stone-400" />
+                                            <Package className="h-6 w-6 text-gray-700" />
                                             <div>
-                                                <p className="text-sm text-gray-400">Order ID</p>
-                                                <p className="font-mono text-white font-semibold">
+                                                <p className="text-sm text-gray-600">Order ID</p>
+                                                <p className="font-mono text-gray-900 font-semibold">
                                                     #{order._id.slice(-8).toUpperCase()}
                                                 </p>
                                             </div>
@@ -136,10 +151,10 @@ const OrdersTab = () => {
 
                                         <div className="flex items-center gap-4">
                                             <div className="text-right">
-                                                <p className="text-2xl font-bold text-stone-400">
+                                                <p className="text-2xl font-bold text-gray-900">
                                                     {order.totalAmount} EGP
                                                 </p>
-                                                <p className="text-sm text-gray-400">
+                                                <p className="text-sm text-gray-600">
                                                     {order.products.length} item(s)
                                                 </p>
                                             </div>
@@ -148,13 +163,13 @@ const OrdersTab = () => {
 
                                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
                                         <div className="flex items-center gap-2 text-sm">
-                                            <Calendar className="h-4 w-4 text-gray-400" />
-                                            <span className="text-gray-300">{formatDate(order.createdAt)}</span>
+                                            <Calendar className="h-4 w-4 text-gray-500" />
+                                            <span className="text-gray-900">{formatDate(order.createdAt)}</span>
                                         </div>
 
                                         <div className="flex items-center gap-2 text-sm">
-                                            <CreditCard className="h-4 w-4 text-gray-400" />
-                                            <span className="text-gray-300 capitalize">{order.paymentMethod}</span>
+                                            <CreditCard className="h-4 w-4 text-gray-500" />
+                                            <span className="text-gray-900 capitalize">{order.paymentMethod}</span>
                                         </div>
 
                                         <div className="flex items-center gap-2">
@@ -169,8 +184,8 @@ const OrdersTab = () => {
                                     </div>
 
                                     {/* Customer Info Preview */}
-                                    <div className="flex items-center gap-2 text-sm text-gray-300">
-                                        <User className="h-4 w-4 text-gray-400" />
+                                    <div className="flex items-center gap-2 text-sm text-gray-900">
+                                        <User className="h-4 w-4 text-gray-500" />
                                         <span>{order.customerInfo.name}</span>
                                         <span className="text-gray-500">•</span>
                                         <span>{order.customerInfo.email}</span>
@@ -178,10 +193,10 @@ const OrdersTab = () => {
                                 </div>
 
                                 {/* Expandable Section */}
-                                <div className="px-6 py-3 bg-gray-750 border-b border-gray-700">
+                                <div className="px-6 py-3 bg-gray-50 border-b border-gray-200">
                                     <button
                                         onClick={() => toggleOrderExpansion(order._id)}
-                                        className="flex items-center justify-between w-full text-left hover:text-stone-400 transition-colors"
+                                        className="flex items-center justify-between w-full text-left text-gray-900 hover:text-gray-700 transition-colors"
                                     >
                                         <span className="text-sm font-medium">
                                             {isExpanded ? "Hide Details" : "View Details"}
@@ -203,44 +218,44 @@ const OrdersTab = () => {
                                     >
                                         {/* Customer Details */}
                                         <div>
-                                            <h3 className="text-lg font-semibold mb-3 text-stone-400">
+                                            <h3 className="text-lg font-semibold mb-3 text-gray-900">
                                                 Customer Information
                                             </h3>
                                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
                                                 <div className="flex items-start gap-2">
-                                                    <User className="h-4 w-4 text-gray-400 mt-0.5" />
+                                                    <User className="h-4 w-4 text-gray-500 mt-0.5" />
                                                     <div>
-                                                        <p className="text-gray-400">Name</p>
-                                                        <p className="text-white">{order.customerInfo.name}</p>
+                                                        <p className="text-gray-600">Name</p>
+                                                        <p className="text-gray-900">{order.customerInfo.name}</p>
                                                     </div>
                                                 </div>
                                                 <div className="flex items-start gap-2">
-                                                    <Mail className="h-4 w-4 text-gray-400 mt-0.5" />
+                                                    <Mail className="h-4 w-4 text-gray-500 mt-0.5" />
                                                     <div>
-                                                        <p className="text-gray-400">Email</p>
-                                                        <p className="text-white">{order.customerInfo.email}</p>
+                                                        <p className="text-gray-600">Email</p>
+                                                        <p className="text-gray-900">{order.customerInfo.email}</p>
                                                     </div>
                                                 </div>
                                                 <div className="flex items-start gap-2">
-                                                    <Phone className="h-4 w-4 text-gray-400 mt-0.5" />
+                                                    <Phone className="h-4 w-4 text-gray-500 mt-0.5" />
                                                     <div>
-                                                        <p className="text-gray-400">Phone</p>
-                                                        <p className="text-white">{order.customerInfo.phone}</p>
+                                                        <p className="text-gray-600">Phone</p>
+                                                        <p className="text-gray-900">{order.customerInfo.phone}</p>
                                                     </div>
                                                 </div>
                                                 <div className="flex items-start gap-2">
-                                                    <MapPin className="h-4 w-4 text-gray-400 mt-0.5" />
+                                                    <MapPin className="h-4 w-4 text-gray-500 mt-0.5" />
                                                     <div>
-                                                        <p className="text-gray-400">Delivery Address</p>
-                                                        <p className="text-white">
+                                                        <p className="text-gray-600">Delivery Address</p>
+                                                        <p className="text-gray-900">
                                                             {order.customerInfo.address.street}
                                                             {order.customerInfo.address.apartment &&
                                                                 `, ${order.customerInfo.address.apartment}`}
                                                         </p>
-                                                        <p className="text-white">
+                                                        <p className="text-gray-900">
                                                             {order.customerInfo.address.city}, {order.customerInfo.address.governorate}
                                                         </p>
-                                                        <p className="text-white">
+                                                        <p className="text-gray-900">
                                                             {order.customerInfo.address.postalCode}, {order.customerInfo.address.country}
                                                         </p>
                                                     </div>
@@ -250,14 +265,14 @@ const OrdersTab = () => {
 
                                         {/* Products */}
                                         <div>
-                                            <h3 className="text-lg font-semibold mb-3 text-stone-400">
+                                            <h3 className="text-lg font-semibold mb-3 text-gray-900">
                                                 Order Items
                                             </h3>
                                             <div className="space-y-3">
                                                 {order.products.map((item, index) => (
                                                     <div
                                                         key={index}
-                                                        className="flex items-center gap-4 bg-gray-700/50 p-3 rounded-lg"
+                                                        className="flex items-center gap-4 bg-gray-50 p-3 rounded-lg border border-gray-200"
                                                     >
                                                         {item.product?.image && (
                                                             <img
@@ -267,11 +282,11 @@ const OrdersTab = () => {
                                                             />
                                                         )}
                                                         <div className="flex-1">
-                                                            <p className="font-medium text-white">
+                                                            <p className="font-medium text-gray-900">
                                                                 {item.product?.name || "Product"}
                                                             </p>
                                                             <div className="flex items-center gap-2 mt-1">
-                                                                <p className="text-sm text-gray-400">
+                                                                <p className="text-sm text-gray-600">
                                                                     Quantity: {item.quantity}
                                                                 </p>
                                                                 {item.size && (
@@ -293,10 +308,10 @@ const OrdersTab = () => {
                                                             </div>
                                                         </div>
                                                         <div className="text-right">
-                                                            <p className="text-stone-400 font-semibold">
+                                                            <p className="text-gray-900 font-semibold">
                                                                 {item.price} EGP
                                                             </p>
-                                                            <p className="text-sm text-gray-400">
+                                                            <p className="text-sm text-gray-600">
                                                                 each
                                                             </p>
                                                         </div>
@@ -307,7 +322,7 @@ const OrdersTab = () => {
 
                                         {/* Status Update */}
                                         <div>
-                                            <h3 className="text-lg font-semibold mb-3 text-stone-400">
+                                            <h3 className="text-lg font-semibold mb-3 text-gray-900">
                                                 Update Order Status
                                             </h3>
                                             <div className="flex gap-2">
@@ -317,14 +332,25 @@ const OrdersTab = () => {
                                                         onClick={() => handleUpdateStatus(order._id, status)}
                                                         disabled={order.paymentStatus === status}
                                                         className={`px-4 py-2 rounded-md capitalize transition-colors ${order.paymentStatus === status
-                                                            ? "bg-gray-600 text-gray-400 cursor-not-allowed"
-                                                            : "bg-stone-500 text-white hover:bg-stone-600"
+                                                            ? "bg-gray-200 text-gray-400 cursor-not-allowed"
+                                                            : "bg-gray-900 text-white hover:bg-gray-800"
                                                             }`}
                                                     >
                                                         Mark as {status}
                                                     </button>
                                                 ))}
                                             </div>
+                                        </div>
+
+                                        {/* Delete Order */}
+                                        <div className="pt-4 border-t border-gray-200">
+                                            <button
+                                                onClick={() => handleDeleteOrder(order._id)}
+                                                className="flex items-center gap-2 px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors"
+                                            >
+                                                <Trash2 className="h-4 w-4" />
+                                                Delete Order
+                                            </button>
                                         </div>
                                     </motion.div>
                                 )}

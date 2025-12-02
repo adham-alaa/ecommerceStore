@@ -36,11 +36,11 @@ function App() {
   if (checkingAuth) return <LoadingSpinner />;
 
   return (
-    <div className='min-h-screen bg-gray-900 text-white relative overflow-hidden'>
+    <div className='min-h-screen bg-white text-black relative overflow-hidden'>
       {/* Background gradient */}
       <div className='absolute inset-0 overflow-hidden'>
         <div className='absolute inset-0'>
-          <div className='absolute top-0 left-1/2 -translate-x-1/2 w-full h-full bg-[radial-gradient(ellipse_at_top,rgba(245,245,244,0.15)_0%,rgba(168,162,158,0.08)_45%,rgba(0,0,0,0.1)_100%)]' />
+          <div className='absolute top-0 left-1/2 -translate-x-1/2 w-full h-full bg-[radial-gradient(ellipse_at_top,rgba(255,255,255,1)_0%,rgba(250,250,250,1)_45%,rgba(240,240,240,1)_100%)]' />
         </div>
       </div>
 

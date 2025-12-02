@@ -36,10 +36,10 @@ const ProductCard = ({ product }) => {
     const totalStock = getTotalStock();
 
     return (
-        <div className='flex w-full relative flex-col overflow-hidden rounded-lg border border-gray-700 shadow-lg'>
-            <div className='relative w-full h-60 overflow-hidden rounded-xl bg-gray-900'>
+        <div className='flex w-full relative flex-col overflow-hidden rounded-lg border border-gray-200 shadow-lg bg-white'>
+            <div className='relative w-full h-60 overflow-hidden rounded-xl bg-gray-100'>
                 <img
-                    className='w-full h-full object-cover'
+                    className='w-full h-auto object-cover'
                     src={product.image || ""}
                     alt={product.name || 'product image'}
                     onError={(e) => {
@@ -63,15 +63,15 @@ const ProductCard = ({ product }) => {
             </div>
 
             <div className='mt-4 px-5 pb-5'>
-                <h5 className='text-xl font-semibold tracking-tight text-white'>{product.name}</h5>
+                <h5 className='text-xl font-semibold tracking-tight text-gray-900'>{product.name}</h5>
                 <div className='mt-2 mb-5 flex items-center justify-between'>
                     <p>
-                        <span className='text-3xl font-bold text-stone-400'>EGP {product.price}</span>
+                        <span className='text-3xl font-bold text-gray-800'>EGP {product.price}</span>
                     </p>
                 </div>
                 <button
-                    className='flex items-center justify-center rounded-lg bg-stone-500 px-5 py-2.5 text-center text-sm font-medium
-					 text-white hover:bg-stone-600 focus:outline-none focus:ring-4 focus:ring-stone-300 disabled:bg-gray-600 disabled:cursor-not-allowed disabled:opacity-50'
+                    className='flex items-center justify-center rounded-lg bg-gray-900 px-5 py-2.5 text-center text-sm font-medium
+					 text-white hover:bg-gray-800 focus:outline-none focus:ring-4 focus:ring-gray-300 disabled:bg-gray-400 disabled:cursor-not-allowed disabled:opacity-50'
                     onClick={handleAddToCartClick}
                     disabled={totalStock === 0}
                 >

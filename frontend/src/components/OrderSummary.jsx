@@ -18,7 +18,7 @@ const OrderSummary = () => {
 
     return (
         <motion.div
-            className='space-y-4 rounded-lg border border-gray-700 bg-gray-800 p-4 shadow-sm sm:p-6'
+            className='space-y-4 rounded-lg border border-gray-200 bg-white p-4 shadow-sm sm:p-6'
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
@@ -28,35 +28,35 @@ const OrderSummary = () => {
             <div className='space-y-4'>
                 <div className='space-y-2'>
                     <dl className='flex items-center justify-between gap-4'>
-                        <dt className='text-base font-normal text-gray-300'>Original price</dt>
-                        <dd className='text-base font-medium text-white'>EGP {formattedSubtotal}</dd>
+                        <dt className='text-base font-normal text-gray-700'>Original price</dt>
+                        <dd className='text-base font-medium text-gray-900'>EGP {formattedSubtotal}</dd>
                     </dl>
 
                     {savings > 0 && (
                         <dl className='flex items-center justify-between gap-4'>
-                            <dt className='text-base font-normal text-gray-300'>Savings</dt>
-                            <dd className='text-base font-medium text-stone-400'>-EGP {formattedSavings}</dd>
+                            <dt className='text-base font-normal text-gray-700'>Savings</dt>
+                            <dd className='text-base font-medium text-green-600'>-EGP {formattedSavings}</dd>
                         </dl>
                     )}
 
                     {coupon && isCouponApplied && (
                         <dl className='flex items-center justify-between gap-4'>
-                            <dt className='text-base font-normal text-gray-300'>Coupon ({coupon.code})</dt>
-                            <dd className='text-base font-medium text-stone-400'>-{coupon.discountPercentage}%</dd>
+                            <dt className='text-base font-normal text-gray-700'>Coupon ({coupon.code})</dt>
+                            <dd className='text-base font-medium text-green-600'>-{coupon.discountPercentage}%</dd>
                         </dl>
                     )}
-                    <dl className='flex items-center justify-between gap-4 border-t border-gray-600 pt-2'>
-                        <dt className='text-base font-bold text-white'>Total</dt>
-                        <dd className='text-base font-bold text-stone-400'>EGP {formattedTotal}</dd>
+                    <dl className='flex items-center justify-between gap-4 border-t border-gray-300 pt-2'>
+                        <dt className='text-base font-bold text-gray-900'>Total</dt>
+                        <dd className='text-base font-bold text-gray-900'>EGP {formattedTotal}</dd>
                     </dl>
                 </div>
 
                 <div className='space-y-3'>
                     <div className='rounded-lg bg-blue-900/20 border border-blue-500/30 p-3'>
-                        <p className='text-sm text-blue-300'>
+                        <p className='text-sm text-black-300'>
                             <span className='font-semibold'>Payment Method:</span> Cash on Delivery
                         </p>
-                        <p className='text-xs text-blue-300/70 mt-1'>
+                        <p className='text-xs text-black-300/70 mt-1'>
                             Please have the exact amount ready for our delivery personnel.
                         </p>
                     </div>
