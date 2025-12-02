@@ -27,7 +27,7 @@ console.log("Allowed origins:", allowedOrigins);
 
 app.use(cors({
     origin: allowedOrigins,
-    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+    methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
     optionsSuccessStatus: 200
 }));
@@ -37,6 +37,28 @@ app.use(cookieParser());
 
 
 
+// Initialize database connection
+let isConnected = false;
+
+const initDB = async () => {
+    if (isConnected) {
+        console.log("Using existing database connection");
+        return;
+    }
+    try {
+        await connectDB();
+        isConnected = true;
+    } catch (error) {
+        console.error("Database connection error:", error);
+    }
+};
+
+// Middleware to ensure DB is connected before handling requests
+app.use(async (req, res, next) => {
+    await initDB();
+    next();
+});
+
 app.use("/api/auth", authRoutes)
 app.use("/api/products", productRoutes)
 app.use("/api/cart", cartRoutes)
@@ -44,9 +66,6 @@ app.use("/api/coupons", couponRoutes)
 app.use("/api/payments", paymentRoutes)
 app.use("/api/analytics", analyticsRoutes)
 app.use("/api/categories", categoryRoutes);
-
-// Connect to database
-connectDB();
 
 // For local development
 if (process.env.NODE_ENV !== "production") {
