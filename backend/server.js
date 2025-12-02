@@ -45,9 +45,15 @@ app.use("/api/payments", paymentRoutes)
 app.use("/api/analytics", analyticsRoutes)
 app.use("/api/categories", categoryRoutes);
 
-app.listen(PORT, () => {
-    console.log("server is running");
+// Connect to database
+connectDB();
 
-    connectDB();
+// For local development
+if (process.env.NODE_ENV !== "production") {
+    app.listen(PORT, () => {
+        console.log("Server is running on port", PORT);
+    });
+}
 
-});
+// Export for Vercel serverless
+export default app;
