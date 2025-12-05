@@ -21,10 +21,20 @@ const tabs = [
 
 const AdminPage = () => {
     const [activeTab, setActiveTab] = useState("create");
+    const [error, setError] = useState(null);
     const { fetchAllProducts } = useProductStore();
 
     useEffect(() => {
-        fetchAllProducts();
+        const loadProducts = async () => {
+            try {
+                await fetchAllProducts();
+                setError(null);
+            } catch (err) {
+                console.error("Error loading products:", err);
+                setError("Failed to load products. You may not be authenticated.");
+            }
+        };
+        loadProducts();
     }, [fetchAllProducts]);
 
     return (
@@ -38,6 +48,12 @@ const AdminPage = () => {
                 >
                     Admin Dashboard
                 </motion.h1>
+
+                {error && (
+                    <div className='mb-6 p-4 bg-red-100 border border-red-400 text-red-700 rounded-lg'>
+                        {error}
+                    </div>
+                )}
 
                 <div className='flex flex-wrap justify-center gap-2 mb-8'>
                     {tabs.map((tab) => (
