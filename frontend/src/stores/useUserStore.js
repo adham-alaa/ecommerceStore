@@ -30,6 +30,11 @@ export const useUserStore = create((set, get) => ({
         try {
             const res = await axios.post("/auth/login", { email, password });
 
+            // Store token in localStorage as fallback for Vercel cross-origin cookies
+            if (res.data.accessToken) {
+                localStorage.setItem("accessToken", res.data.accessToken);
+            }
+
             set({ user: res.data.user, loading: false });
         } catch (error) {
             set({ loading: false });

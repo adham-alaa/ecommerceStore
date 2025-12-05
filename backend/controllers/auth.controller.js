@@ -56,7 +56,6 @@ export const Signup = async (req, res) => {
 
         setCookies(res, accessToken, refreshToken);
 
-
         res.status(201).json({
             user: {
                 _id: user._id,
@@ -65,7 +64,9 @@ export const Signup = async (req, res) => {
                 role: user.role,
                 phone: user.phone,
                 address: user.address
-            }, message: "User created successfully"
+            },
+            accessToken,
+            message: "User created successfully"
         });
     } catch (error) {
         console.log(error.message);
@@ -93,7 +94,9 @@ export const Login = async (req, res) => {
                     role: user.role,
                     phone: user.phone,
                     address: user.address
-                }, message: "Login successful"
+                },
+                accessToken,
+                message: "Login successful"
             });
         } else {
             res.status(401).json({ message: "Invalid email or password" });

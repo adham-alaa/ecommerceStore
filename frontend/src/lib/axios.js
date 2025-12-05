@@ -9,4 +9,13 @@ const axiosInstance = axios.create({
     withCredentials: true, // send cookies to the server
 });
 
+// Add token from localStorage to request headers as fallback
+axiosInstance.interceptors.request.use((config) => {
+    const token = localStorage.getItem("accessToken");
+    if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+});
+
 export default axiosInstance;

@@ -7,10 +7,20 @@ dotenv.config();
 
 export const protectRoute = async (req, res, next) => {
     try {
-        const accessToken = req.cookies.accessToken;
+        // Try to get token from cookies first, then from Authorization header
+        let accessToken = req.cookies.accessToken;
+
+        if (!accessToken) {
+            const authHeader = req.headers.authorization;
+            if (authHeader && authHeader.startsWith("Bearer ")) {
+                accessToken = authHeader.substring(7);
+            }
+        }
+
         if (!accessToken) {
             return res.status(401).json({ message: "Unauthorized: No access token provided" });
         }
+
         try {
             const decoded = jwt.verify(accessToken, process.env.JWT_ACCESS_SECRET);
             const user = await User.findById(decoded.userId).select("-password");
