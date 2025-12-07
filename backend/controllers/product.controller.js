@@ -45,7 +45,7 @@ export const getFeaturedProducts = async (req, res) => {
 
 export const createProduct = async (req, res) => {
     try {
-        const { name, description, price, image, category, colorVariants } = req.body;
+        const { name, description, price, image, category, colorVariants, sizeChart } = req.body;
 
         let cloudinaryResponse = null;
         if (image) {
@@ -86,6 +86,7 @@ export const createProduct = async (req, res) => {
             image: cloudinaryResponse ? cloudinaryResponse.secure_url : "",
             category,
             colorVariants: processedColorVariants,
+            sizeChart: sizeChart || "",
         });
         console.log("Product created with image:", product.image);
         res.status(201).json({ product, message: "Product created successfully" });
