@@ -151,7 +151,7 @@ const ProductOptionsModal = ({ product, isOpen, onClose, onAddToCart }) => {
                                     <img
                                         src={product.sizeChart}
                                         alt='Size Chart'
-                                        className='w-full h-32 object-cover rounded-lg border border-gray-300'
+                                        className='w-full h-48 object-cover rounded-lg border border-gray-300'
                                     />
                                 </div>
                             )}
