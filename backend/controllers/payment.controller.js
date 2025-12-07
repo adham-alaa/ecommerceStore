@@ -2,7 +2,6 @@ import Coupon from "../models/coupon.model.js";
 import Order, { generateOrderNumber } from "../models/order.model.js";
 import User from "../models/user.model.js";
 import Product from "../models/product.model.js";
-import { updateFeaturedProductsCache } from "./product.controller.js";
 
 export const createCashOrder = async (req, res) => {
     try {
@@ -103,7 +102,6 @@ export const createCashOrder = async (req, res) => {
         await newOrder.save();
 
         // Decrement stock for each product
-        let needsCacheUpdate = false;
         for (const orderProduct of orderProducts) {
             const product = await Product.findById(orderProduct.product);
             if (product) {
@@ -125,10 +123,6 @@ export const createCashOrder = async (req, res) => {
                                 product.colorVariants[variantIndex].sizes[sizeIndex].stock =
                                     Math.max(0, currentStock - orderProduct.quantity);
                                 await product.save();
-                                // Check if this product is featured
-                                if (product.isFeatured) {
-                                    needsCacheUpdate = true;
-                                }
                             }
                         }
                     }
@@ -136,18 +130,8 @@ export const createCashOrder = async (req, res) => {
                     // Product uses old stock structure (backward compatibility)
                     product.stock = Math.max(0, product.stock - orderProduct.quantity);
                     await product.save();
-                    // Check if this product is featured
-                    if (product.isFeatured) {
-                        needsCacheUpdate = true;
-                    }
                 }
             }
-        }
-
-        // Update featured products cache if any featured product stock changed
-        if (needsCacheUpdate) {
-            await updateFeaturedProductsCache();
-            console.log("Featured products cache updated after order");
         }
 
         // Increment coupon usage and deactivate if maxUses reached
@@ -249,8 +233,6 @@ export const deleteOrder = async (req, res) => {
 
         // Restore stock for cancelled orders if the order was pending or paid
         if (order.paymentStatus !== "cancelled") {
-            let needsCacheUpdate = false;
-
             for (const orderProduct of order.products) {
                 const product = await Product.findById(orderProduct.product);
                 if (product) {
@@ -268,9 +250,6 @@ export const deleteOrder = async (req, res) => {
                                     // Restore the stock for this specific color-size combination
                                     product.colorVariants[variantIndex].sizes[sizeIndex].stock += orderProduct.quantity;
                                     await product.save();
-                                    if (product.isFeatured) {
-                                        needsCacheUpdate = true;
-                                    }
                                 }
                             }
                         }
@@ -278,17 +257,8 @@ export const deleteOrder = async (req, res) => {
                         // Product uses old stock structure (backward compatibility)
                         product.stock += orderProduct.quantity;
                         await product.save();
-                        if (product.isFeatured) {
-                            needsCacheUpdate = true;
-                        }
                     }
                 }
-            }
-
-            // Update featured products cache if any featured product stock changed
-            if (needsCacheUpdate) {
-                await updateFeaturedProductsCache();
-                console.log("Featured products cache updated after order deletion");
             }
         }
 

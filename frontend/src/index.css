@@ -1,1 +1,115 @@
 @import "tailwindcss";
+
+/* Canela Font Family */
+@font-face {
+    font-family: 'Canela';
+    src: url('/fonts/Canela-Thin-Trial.otf') format('opentype');
+    font-weight: 100;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Canela';
+    src: url('/fonts/Canela-Light-Trial.otf') format('opentype');
+    font-weight: 300;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Canela';
+    src: url('/fonts/Canela-Regular-Trial.otf') format('opentype');
+    font-weight: 400;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Canela';
+    src: url('/fonts/Canela-Medium-Trial.otf') format('opentype');
+    font-weight: 500;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Canela';
+    src: url('/fonts/Canela-Bold-Trial.otf') format('opentype');
+    font-weight: 700;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Canela';
+    src: url('/fonts/Canela-Black-Trial.otf') format('opentype');
+    font-weight: 900;
+    font-style: normal;
+}
+
+/* Canela Text for body copy */
+@font-face {
+    font-family: 'Canela Text';
+    src: url('/fonts/CanelaText-Regular-Trial.otf') format('opentype');
+    font-weight: 400;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Canela Text';
+    src: url('/fonts/CanelaText-Light-Trial.otf') format('opentype');
+    font-weight: 300;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Canela Text';
+    src: url('/fonts/CanelaText-Medium-Trial.otf') format('opentype');
+    font-weight: 500;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Canela Text';
+    src: url('/fonts/CanelaText-Bold-Trial.otf') format('opentype');
+    font-weight: 700;
+    font-style: normal;
+}
+
+/* Global Canela Font Application */
+* {
+    font-family: 'Canela', serif;
+}
+
+/* Headings with Canela Bold */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-family: 'Canela', serif;
+    font-weight: 700;
+}
+
+/* Body text with Canela Text */
+p,
+span,
+div,
+label,
+button,
+a,
+li {
+    font-family: 'Canela', serif;
+}
+
+/* Form labels with Canela Medium */
+label {
+    font-weight: 500;
+}
+
+/* Button text */
+button {
+    font-weight: 500;
+}
+
+/* Links */
+a {
+    font-weight: 400;
+}

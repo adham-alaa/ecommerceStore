@@ -19,6 +19,7 @@ const CreateProductForm = () => {
         price: "",
         category: "",
         image: "",
+        sizeChart: "",
         colorVariants: [],
     });
 
@@ -42,7 +43,7 @@ const CreateProductForm = () => {
         e.preventDefault();
         try {
             await createProduct(newProduct);
-            setNewProduct({ name: "", description: "", price: "", category: "", image: "", colorVariants: [] });
+            setNewProduct({ name: "", description: "", price: "", category: "", image: "", sizeChart: "", colorVariants: [] });
             setColorInput("");
             setColorImageInput("");
             setSelectedSizesForColor([]);
@@ -350,9 +351,50 @@ const CreateProductForm = () => {
                         className='cursor-pointer bg-gray-100 py-2 px-3 border border-gray-300 rounded-md shadow-sm text-sm leading-4 font-medium text-gray-700 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-400'
                     >
                         <Upload className='h-5 w-5 inline-block mr-2' />
-                        Upload Image
+                        Upload Product Image
                     </label>
                     {newProduct.image && <span className='ml-3 text-sm text-gray-400'>Image uploaded </span>}
+                </div>
+
+                <div>
+                    <label className='block text-sm font-medium text-gray-700 mb-2'>
+                        Size Chart (Optional)
+                    </label>
+                    <div className='mt-1 flex items-center'>
+                        <input
+                            type='file'
+                            id='sizeChart'
+                            className='sr-only'
+                            accept='image/*'
+                            onChange={(e) => {
+                                const file = e.target.files[0];
+                                if (file) {
+                                    const reader = new FileReader();
+                                    reader.onloadend = () => {
+                                        setNewProduct({ ...newProduct, sizeChart: reader.result });
+                                    };
+                                    reader.readAsDataURL(file);
+                                }
+                            }}
+                        />
+                        <label
+                            htmlFor='sizeChart'
+                            className='cursor-pointer bg-gray-100 py-2 px-3 border border-gray-300 rounded-md shadow-sm text-sm leading-4 font-medium text-gray-700 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-400'
+                        >
+                            <Upload className='h-5 w-5 inline-block mr-2' />
+                            Upload Size Chart
+                        </label>
+                        {newProduct.sizeChart && <span className='ml-3 text-sm text-gray-400'>Size chart uploaded </span>}
+                    </div>
+                    {newProduct.sizeChart && (
+                        <div className='mt-3'>
+                            <img
+                                src={newProduct.sizeChart}
+                                alt='Size Chart Preview'
+                                className='max-w-full h-auto rounded-lg border border-gray-300'
+                            />
+                        </div>
+                    )}
                 </div>
 
                 <button

@@ -48,6 +48,10 @@ const productSchema = new mongoose.Schema({
             }
         }]
     }],
+    sizeChart: {
+        type: String,
+        default: ""
+    },
     isFeatured: {
         type: Boolean,
         default: false

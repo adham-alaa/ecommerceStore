@@ -13,7 +13,7 @@ const HomePage = () => {
     return (
         <div className='relative min-h-screen text-black overflow-hidden'>
             {/* Hero Section */}
-            <div className='relative z-10 pt-20 pb-16'>
+            <div className='relative z-10  pb-12'>
                 <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
                     <motion.div
                         initial={{ opacity: 0, y: 30 }}
@@ -25,15 +25,19 @@ const HomePage = () => {
                             initial={{ opacity: 0, scale: 0.9 }}
                             animate={{ opacity: 1, scale: 1 }}
                             transition={{ duration: 1, delay: 0.2, ease: "easeOut" }}
-                            className='text-6xl sm:text-7xl md:text-8xl font-bold mb-6 bg-linear-to-r from-gray-800 via-gray-900 to-gray-700 bg-clip-text text-transparent'
+                            className='text-6xl sm:text-7xl md:text-8xl font-bold mb-6 bg-linear-to-r from-gray-800 via-gray-900 to-gray-700 bg-clip-text text-transparent font-canela'
                         >
-                            SYNZA
+                            <img
+                                src="/SYNZABLACK.png"
+                                alt="SYNZA Logo"
+                                className=" mx-auto w-64 sm:w-80 md:w-96"
+                            />
                         </motion.h1>
                         <motion.p
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.8, delay: 0.5, ease: "easeOut" }}
-                            className='text-xl sm:text-2xl md:text-3xl text-gray-700 font-light tracking-wide'
+                            className='text-xl sm:text-2xl md:text-3xl text-gray-700 font-light tracking-wide font-canela'
                         >
                             Distinctive. sophisticated. Bold.
                         </motion.p>
@@ -86,9 +90,9 @@ const HomePage = () => {
                                 whileInView={{ opacity: 1, y: 0 }}
                                 viewport={{ once: true }}
                                 transition={{ duration: 0.6, delay: 0.3 }}
-                                className='text-4xl sm:text-5xl font-bold text-gray-900'
+                                className='text-4xl sm:text-5xl font-bold text-gray-900 font-canela'
                             >
-                                Where Luxury Begins with the Touch
+                                Where Luxury Begins with the Touch
                             </motion.h2>
 
                             <motion.div

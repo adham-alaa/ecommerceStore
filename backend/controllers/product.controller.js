@@ -1,34 +1,40 @@
 import Product from "../models/product.model.js";
-import redis from "../lib/redis.js";
 import cloudinary from "../lib/cloudinary.js";
 
 
 export const getAllProducts = async (req, res) => {
     try {
-        const products = await Product.find({});
+        const raw = await Product.find({}).lean();
+        const products = raw.map(p => ({
+            ...p,
+            totalStock: Array.isArray(p.colorVariants)
+                ? p.colorVariants.reduce((acc, v) => acc + (Array.isArray(v.sizes)
+                    ? v.sizes.reduce((sAcc, s) => sAcc + (Number(s.stock) || 0), 0)
+                    : 0), 0)
+                : 0
+        }));
         res.status(200).json({ products });
-
-
     } catch (error) {
         console.log(error.message);
         res.status(500).json({ message: error.message, error: error.message });
-
     }
 };
 
 export const getFeaturedProducts = async (req, res) => {
     try {
-        let featuredProducts = await redis.get("featured_products");
-        if (featuredProducts) {
-            console.log("Serving from cache");
-            return res.status(200).json({ products: JSON.parse(featuredProducts) });
-        }
-        featuredProducts = await Product.find({ isFeatured: true }).lean();
+        let featuredProducts = await Product.find({ isFeatured: true }).lean();
+        featuredProducts = featuredProducts.map(p => ({
+            ...p,
+            totalStock: Array.isArray(p.colorVariants)
+                ? p.colorVariants.reduce((acc, v) => acc + (Array.isArray(v.sizes)
+                    ? v.sizes.reduce((sAcc, s) => sAcc + (Number(s.stock) || 0), 0)
+                    : 0), 0)
+                : 0
+        }));
 
-        if (!featuredProducts) {
+        if (!featuredProducts || featuredProducts.length === 0) {
             return res.status(404).json({ message: "No featured products found" });
         }
-        await redis.set("featured_products", JSON.stringify(featuredProducts));
         res.status(200).json({ products: featuredProducts });
 
     } catch (error) {
@@ -115,10 +121,6 @@ export const deleteProduct = async (req, res) => {
         }
         await Product.findByIdAndDelete(id);
 
-        // Update the featured products cache
-        await updateFeaturedProductsCache();
-        console.log("Featured products cache updated after deletion");
-
         res.status(200).json({ message: "Product deleted successfully" });
 
     } catch (error) {
@@ -190,9 +192,17 @@ export const getRecommendedProducts = async (req, res) => {
 export const getProductsByCategory = async (req, res) => {
     const { category } = req.params;
     try {
-        const products = await Product.find({ category });
+        // Case-insensitive match for category
+        const raw = await Product.find({ category: { $regex: `^${category}$`, $options: "i" } }).lean();
+        const products = raw.map(p => ({
+            ...p,
+            totalStock: Array.isArray(p.colorVariants)
+                ? p.colorVariants.reduce((acc, v) => acc + (Array.isArray(v.sizes)
+                    ? v.sizes.reduce((sAcc, s) => sAcc + (Number(s.stock) || 0), 0)
+                    : 0), 0)
+                : 0
+        }));
         res.status(200).json({ products });
-
     } catch (error) {
         console.log(error.message);
         res.status(500).json({ message: error.message, error: error.message });
@@ -206,7 +216,6 @@ export const toggleFeaturedProduct = async (req, res) => {
             product.isFeatured = !product.isFeatured;
             const updatedProduct = await product.save();
 
-            await updateFeaturedProductsCache();
             res.status(200).json({ product: updatedProduct, message: "Product featured status toggled" });
         } else {
             res.status(404).json({ message: "Product not found" });
@@ -219,22 +228,4 @@ export const toggleFeaturedProduct = async (req, res) => {
 };
 
 
-export const updateFeaturedProductsCache = async () => {
-    try {
-        const featuredProducts = await Product.find({ isFeatured: true }).lean();
-        await redis.set("featured_products", JSON.stringify(featuredProducts));
-    } catch (error) {
-        console.log("Error updating featured products cache:", error.message);
-    }
-}
 
-export const clearFeaturedCache = async (req, res) => {
-    try {
-        await redis.del("featured_products");
-        console.log("Featured products cache cleared");
-        res.status(200).json({ message: "Cache cleared successfully" });
-    } catch (error) {
-        console.log("Error clearing cache:", error.message);
-        res.status(500).json({ message: "Failed to clear cache", error: error.message });
-    }
-}

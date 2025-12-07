@@ -62,14 +62,20 @@ app.use("/api/payments", paymentRoutes)
 app.use("/api/analytics", analyticsRoutes)
 app.use("/api/categories", categoryRoutes);
 
-// Connect to database on startup
-connectDB().catch(err => console.error("Database connection failed:", err));
-
 // For local development
 if (process.env.NODE_ENV !== "production") {
-    app.listen(PORT, () => {
-        console.log("Server is running on port", PORT);
+    connectDB().then(() => {
+        app.listen(PORT, () => {
+            console.log("Server is running on port", PORT);
+            console.log("FRONTEND_URL:", process.env.FRONTEND_URL);
+        });
+    }).catch(err => {
+        console.error("Database connection failed:", err);
+        process.exit(1);
     });
+} else {
+    // For Vercel serverless, connect on startup
+    connectDB().catch(err => console.error("Database connection failed:", err));
 }
 
 // Export for Vercel serverless
