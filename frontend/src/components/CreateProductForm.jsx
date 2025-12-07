@@ -19,6 +19,7 @@ const CreateProductForm = () => {
         price: "",
         category: "",
         image: "",
+        images: [],
         sizeChart: "",
         colorVariants: [],
     });
@@ -43,7 +44,7 @@ const CreateProductForm = () => {
         e.preventDefault();
         try {
             await createProduct(newProduct);
-            setNewProduct({ name: "", description: "", price: "", category: "", image: "", sizeChart: "", colorVariants: [] });
+            setNewProduct({ name: "", description: "", price: "", category: "", image: "", images: [], sizeChart: "", colorVariants: [] });
             setColorInput("");
             setColorImageInput("");
             setSelectedSizesForColor([]);
@@ -137,6 +138,30 @@ const CreateProductForm = () => {
 
             reader.readAsDataURL(file); // base64
         }
+    };
+
+    const handleMultipleImagesChange = (e) => {
+        const files = Array.from(e.target.files);
+        if (files.length > 0) {
+            const readPromises = files.map(file => {
+                return new Promise((resolve) => {
+                    const reader = new FileReader();
+                    reader.onloadend = () => resolve(reader.result);
+                    reader.readAsDataURL(file);
+                });
+            });
+
+            Promise.all(readPromises).then(base64Images => {
+                setNewProduct(prev => ({ ...prev, images: [...prev.images, ...base64Images] }));
+            });
+        }
+    };
+
+    const removeImage = (indexToRemove) => {
+        setNewProduct(prev => ({
+            ...prev,
+            images: prev.images.filter((_, index) => index !== indexToRemove)
+        }));
     };
 
     return (
@@ -354,6 +379,54 @@ const CreateProductForm = () => {
                         Upload Product Image
                     </label>
                     {newProduct.image && <span className='ml-3 text-sm text-gray-400'>Image uploaded </span>}
+                </div>
+
+                <div>
+                    <label className='block text-sm font-medium text-gray-700 mb-2'>
+                        Additional Product Images (Optional)
+                    </label>
+                    <div className='mt-1 flex items-center'>
+                        <input 
+                            type='file' 
+                            id='images' 
+                            className='sr-only' 
+                            accept='image/*' 
+                            multiple 
+                            onChange={handleMultipleImagesChange} 
+                        />
+                        <label
+                            htmlFor='images'
+                            className='cursor-pointer bg-gray-100 py-2 px-3 border border-gray-300 rounded-md shadow-sm text-sm leading-4 font-medium text-gray-700 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-400'
+                        >
+                            <Upload className='h-5 w-5 inline-block mr-2' />
+                            Upload Additional Images
+                        </label>
+                        {newProduct.images.length > 0 && (
+                            <span className='ml-3 text-sm text-gray-400'>
+                                {newProduct.images.length} image{newProduct.images.length > 1 ? 's' : ''} uploaded
+                            </span>
+                        )}
+                    </div>
+                    {newProduct.images.length > 0 && (
+                        <div className='mt-4 grid grid-cols-4 gap-2'>
+                            {newProduct.images.map((img, index) => (
+                                <div key={index} className='relative'>
+                                    <img
+                                        src={img}
+                                        alt={`Additional ${index + 1}`}
+                                        className='w-full h-24 object-cover rounded border border-gray-300'
+                                    />
+                                    <button
+                                        type='button'
+                                        onClick={() => removeImage(index)}
+                                        className='absolute -top-2 -right-2 bg-red-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm hover:bg-red-700'
+                                    >
+                                        ×
+                                    </button>
+                                </div>
+                            ))}
+                        </div>
+                    )}
                 </div>
 
                 <div>

@@ -5,10 +5,15 @@ import { motion, AnimatePresence } from "framer-motion";
 const ProductOptionsModal = ({ product, isOpen, onClose, onAddToCart }) => {
     const [selectedSize, setSelectedSize] = useState("");
     const [selectedColor, setSelectedColor] = useState("");
+    const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
     const selectedColorVariant = product.colorVariants?.find(v => v.color === selectedColor);
     const displayImage = selectedColorVariant?.image || product.image;
     const availableSizes = selectedColorVariant?.sizes || [];
+    
+    // Get all product images (main + additional)
+    const allImages = [product.image, ...(product.images || [])].filter(Boolean);
+    const currentDisplayImage = selectedColorVariant?.image || allImages[currentImageIndex] || product.image;
 
     const handleAddToCart = () => {
         if (product.colorVariants?.length > 0 && !selectedColor) {
@@ -67,10 +72,34 @@ const ProductOptionsModal = ({ product, isOpen, onClose, onAddToCart }) => {
                             {/* Product Image */}
                             <div className='mb-4'>
                                 <img
-                                    src={displayImage}
+                                    src={currentDisplayImage}
                                     alt={product.name}
                                     className='w-full h-48 sm:h-80 object-contain rounded-lg bg-gray-100'
                                 />
+                                
+                                {/* Image Thumbnails - only show if not color selected and there are multiple images */}
+                                {!selectedColorVariant && allImages.length > 1 && (
+                                    <div className='mt-3 flex gap-2 overflow-x-auto'>
+                                        {allImages.map((img, index) => (
+                                            <button
+                                                key={index}
+                                                type='button'
+                                                onClick={() => setCurrentImageIndex(index)}
+                                                className={`flex-shrink-0 w-16 h-16 rounded border-2 overflow-hidden transition-all ${
+                                                    currentImageIndex === index 
+                                                        ? 'border-gray-900' 
+                                                        : 'border-gray-300 hover:border-gray-400'
+                                                }`}
+                                            >
+                                                <img
+                                                    src={img}
+                                                    alt={`View ${index + 1}`}
+                                                    className='w-full h-full object-cover'
+                                                />
+                                            </button>
+                                        ))}
+                                    </div>
+                                )}
                             </div>
 
                             {/* Product Info */}

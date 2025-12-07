@@ -45,7 +45,7 @@ export const getFeaturedProducts = async (req, res) => {
 
 export const createProduct = async (req, res) => {
     try {
-        const { name, description, price, image, category, colorVariants, sizeChart } = req.body;
+        const { name, description, price, image, images, category, colorVariants, sizeChart } = req.body;
 
         let cloudinaryResponse = null;
         if (image) {
@@ -57,6 +57,21 @@ export const createProduct = async (req, res) => {
             } catch (uploadError) {
                 console.error("Cloudinary upload failed:", uploadError.message);
                 return res.status(400).json({ message: "Image upload failed", error: uploadError.message });
+            }
+        }
+
+        // Upload additional images to Cloudinary
+        let uploadedImages = [];
+        if (images && Array.isArray(images)) {
+            for (const img of images) {
+                try {
+                    const imgResponse = await cloudinary.uploader.upload(img, {
+                        folder: "products/gallery"
+                    });
+                    uploadedImages.push(imgResponse.secure_url);
+                } catch (uploadError) {
+                    console.error("Additional image upload failed:", uploadError.message);
+                }
             }
         }
 
@@ -84,6 +99,7 @@ export const createProduct = async (req, res) => {
             description,
             price,
             image: cloudinaryResponse ? cloudinaryResponse.secure_url : "",
+            images: uploadedImages,
             category,
             colorVariants: processedColorVariants,
             sizeChart: sizeChart || "",
