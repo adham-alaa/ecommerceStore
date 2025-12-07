@@ -17,7 +17,8 @@ export const useProductStore = create((set) => ({
             }));
             toast.success("Product created successfully!");
         } catch (error) {
-            toast.error("failed to create product");
+            console.error("Product creation error:", error.response?.data || error.message);
+            toast.error(error.response?.data?.message || "Failed to create product");
             set({ loading: false });
         }
     },

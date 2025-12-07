@@ -37,8 +37,9 @@ export const useUserStore = create((set, get) => ({
 
             set({ user: res.data.user, loading: false });
         } catch (error) {
+            console.error("Login error:", error.response?.data || error.message);
             set({ loading: false });
-            toast.error(error.response?.data?.message || "An error occurred");
+            toast.error(error.response?.data?.message || "An error occurred during login");
         }
     },
 

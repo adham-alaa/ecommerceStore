@@ -386,13 +386,13 @@ const CreateProductForm = () => {
                         Additional Product Images (Optional)
                     </label>
                     <div className='mt-1 flex items-center'>
-                        <input 
-                            type='file' 
-                            id='images' 
-                            className='sr-only' 
-                            accept='image/*' 
-                            multiple 
-                            onChange={handleMultipleImagesChange} 
+                        <input
+                            type='file'
+                            id='images'
+                            className='sr-only'
+                            accept='image/*'
+                            multiple
+                            onChange={handleMultipleImagesChange}
                         />
                         <label
                             htmlFor='images'
