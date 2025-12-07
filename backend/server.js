@@ -11,11 +11,28 @@ import categoryRoutes from "./routes/category.route.js"
 import { connectDB } from "./lib/db.js";
 import cookieParser from "cookie-parser";
 
-
 dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 5000;
+
+// Database connection flag
+let dbConnected = false;
+
+// Middleware to ensure DB is connected
+app.use(async (req, res, next) => {
+    if (!dbConnected) {
+        try {
+            await connectDB();
+            dbConnected = true;
+            console.log("Database connected via middleware");
+        } catch (err) {
+            console.error("Database connection failed:", err);
+            return res.status(500).json({ message: "Database connection failed" });
+        }
+    }
+    next();
+});
 
 // CORS configuration
 app.use(cors({
@@ -68,14 +85,12 @@ if (process.env.NODE_ENV !== "production") {
         app.listen(PORT, () => {
             console.log("Server is running on port", PORT);
             console.log("FRONTEND_URL:", process.env.FRONTEND_URL);
+            dbConnected = true;
         });
     }).catch(err => {
         console.error("Database connection failed:", err);
         process.exit(1);
     });
-} else {
-    // For Vercel serverless, connect on startup
-    connectDB().catch(err => console.error("Database connection failed:", err));
 }
 
 // Export for Vercel serverless
