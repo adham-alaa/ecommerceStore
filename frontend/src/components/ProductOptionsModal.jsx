@@ -144,6 +144,18 @@ const ProductOptionsModal = ({ product, isOpen, onClose, onAddToCart }) => {
                                 </>
                             )}
 
+                            {/* Size Chart */}
+                            {product.sizeChart && (
+                                <div className='mb-6'>
+                                    <h4 className='text-sm font-medium text-gray-700 mb-3'>Size Chart</h4>
+                                    <img
+                                        src={product.sizeChart}
+                                        alt='Size Chart'
+                                        className='w-full h-auto rounded-lg border border-gray-300'
+                                    />
+                                </div>
+                            )}
+
                             {/* Action Buttons */}
                             <div className='flex flex-col sm:flex-row gap-2 sm:gap-3'>
                                 <button
