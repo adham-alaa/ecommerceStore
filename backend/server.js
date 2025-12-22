@@ -19,6 +19,8 @@ const PORT = process.env.PORT || 5000;
 // Database connection flag
 let dbConnected = false;
 
+// testforpush
+
 // Middleware to ensure DB is connected (only for serverless/production)
 app.use(async (req, res, next) => {
     if (process.env.NODE_ENV === "production" && !dbConnected) {

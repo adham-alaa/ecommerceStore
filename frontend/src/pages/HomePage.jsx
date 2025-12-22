@@ -10,6 +10,9 @@ const HomePage = () => {
         fetchFeaturedProducts();
     }, [fetchFeaturedProducts]);
 
+    // testforpush
+
+
     return (
         <div className='relative min-h-screen text-black overflow-hidden'>
             {/* Hero Section */}
